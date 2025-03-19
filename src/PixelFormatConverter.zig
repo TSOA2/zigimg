@@ -12,10 +12,13 @@ const GrayscaleFactors: math.float4 = .{ 0.2125, 0.7154, 0.0721, 1.0 };
 
 /// Convert a pixel storage into another format.
 /// For the conversion to the indexed formats, no dithering is done.
-pub fn convert(allocator: std.mem.Allocator, source: *const color.PixelStorage, destination_format: PixelFormat) Image.ConvertError!color.PixelStorage {
+pub fn convert(allocator: std.mem.Allocator, source: *const color.PixelStorage, destination_format: PixelFormat, converted: *bool) Image.ConvertError!color.PixelStorage {
     if (std.meta.activeTag(source.*) == destination_format) {
+        converted.* = false;
         return source.*;
     }
+
+    converted.* = true;
 
     const pixel_count = source.len();
 
